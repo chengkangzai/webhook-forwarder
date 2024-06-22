@@ -59,9 +59,7 @@ return [
              *
              * This should be set to a class that extends \Spatie\WebhookClient\Jobs\ProcessWebhookJob.
              */
-            'process_webhook_job' =>
-                \App\Jobs\ForwardWebhookJob::class
-            ,
+            'process_webhook_job' => \App\Jobs\ForwardWebhookJob::class,
         ],
     ],
 
