@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Models\Instance;
 use App\Models\WebhookCall;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -17,18 +18,23 @@ class StoreWebhookCallJob implements ShouldQueue
     use SerializesModels;
 
     public function __construct(
-        public array $payload,
+        public array  $payload,
         public string $url,
-        public array $headers,
-    ) {}
+        public array  $headers,
+    )
+    {
+    }
 
     public function handle(): void
     {
-        $webhook = WebhookCall::create([
-            'name' => 'default',
-            'url' => $this->url,
-            'headers' => $this->headers,
-            'payload' => $this->payload,
-        ]);
+        Instance::where('instance_id', $this->payload['instanceData']['idInstance'])
+            ->first()
+            ->webhookCalls()
+            ->create([
+                'name' => 'default',
+                'url' => $this->url,
+                'headers' => $this->headers,
+                'payload' => $this->payload,
+            ]);
     }
 }

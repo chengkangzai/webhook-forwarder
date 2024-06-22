@@ -10,11 +10,11 @@ class WebhookController extends Controller
 {
     public function __invoke(Request $request)
     {
-        StoreWebhookCallJob::dispatch(
+        dispatch(new StoreWebhookCallJob(
             $request->all(),
             $request->url(),
             $request->headers->all()
-        );
+        ));
 
         return new Response('Ok', 200);
     }

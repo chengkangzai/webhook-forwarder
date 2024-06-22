@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Enums\InstanceStatus;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Instance extends Model
 {
@@ -21,5 +22,10 @@ class Instance extends Model
             'payload' => 'array',
             'status' => Instancestatus::class,
         ];
+    }
+
+    public function webhookCalls(): HasMany
+    {
+        return $this->hasMany(WebhookCall::class);
     }
 }
