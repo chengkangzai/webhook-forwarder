@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Enums\InstanceStatus;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Instance extends Model
@@ -27,5 +28,10 @@ class Instance extends Model
     public function webhookCalls(): HasMany
     {
         return $this->hasMany(WebhookCall::class);
+    }
+
+    public function sites(): BelongsToMany
+    {
+        return $this->belongsToMany(Site::class);
     }
 }

@@ -41,11 +41,6 @@ class SiteResource extends Resource
                     ->required()
                     ->url(),
 
-                Select::make('instance_id')
-                    ->relationship('instance', 'name')
-                    ->searchable()
-                    ->required(),
-
                 Placeholder::make('created_at')
                     ->label('Created Date')
                     ->content(fn(?Site $record): string => $record?->created_at?->diffForHumans() ?? '-'),
@@ -64,9 +59,8 @@ class SiteResource extends Resource
 
                 ToggleColumn::make('is_active'),
 
-                TextColumn::make('instance.name')
-                    ->searchable()
-                    ->sortable(),
+                TextColumn::make('instances_count')
+                    ->counts('instances')
             ])
             ->filters([
                 //

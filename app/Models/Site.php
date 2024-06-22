@@ -4,13 +4,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Site extends Model
 {
     protected $fillable = [
         'url',
         'is_active',
-        'instance_id',
     ];
 
     protected function casts(): array
@@ -20,8 +20,8 @@ class Site extends Model
         ];
     }
 
-    public function instance(): BelongsTo
+    public function instances(): BelongsToMany
     {
-        return $this->belongsTo(Instance::class);
+        return $this->belongsToMany(Instance::class);
     }
 }

@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\Instance;
+use App\Models\Site;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -7,16 +9,16 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration {
     public function up(): void
     {
-        Schema::create('sites', function (Blueprint $table) {
+        Schema::create('instance_site', function (Blueprint $table) {
             $table->id();
-            $table->string('url');
             $table->boolean('is_active');
-            $table->timestamps();
+            $table->foreignIdFor(Instance::class);
+            $table->foreignIdFor(Site::class);
         });
     }
 
     public function down(): void
     {
-        Schema::dropIfExists('sites');
+        Schema::dropIfExists('instance_site');
     }
 };
