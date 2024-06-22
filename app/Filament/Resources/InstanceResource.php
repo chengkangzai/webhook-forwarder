@@ -2,9 +2,8 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\WebhookCallResource\Pages;
-use App\Models\WebhookCall;
-use Filament\Forms\Components\KeyValue;
+use App\Filament\Resources\InstanceResource\Pages;
+use App\Models\Instance;
 use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
@@ -16,12 +15,11 @@ use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 
-
-class WebhookCallResource extends Resource
+class InstanceResource extends Resource
 {
-    protected static ?string $model = WebhookCall::class;
+    protected static ?string $model = Instance::class;
 
-    protected static ?string $slug = 'webhook-calls';
+    protected static ?string $slug = 'instances';
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
@@ -29,27 +27,22 @@ class WebhookCallResource extends Resource
     {
         return $form
             ->schema([
-                TextInput::make('name')
-                    ->required(),
-
-                TextInput::make('url')
-                    ->required()
-                    ->url(),
-
-                KeyValue::make('headers')
-                    ->columnSpanFull(),
-                KeyValue::make('payload')
-                    ->columnSpanFull(),
-                KeyValue::make('exception')
-                    ->columnSpanFull(),
-
                 Placeholder::make('created_at')
                     ->label('Created Date')
-                    ->content(fn(?WebhookCall $record): string => $record?->created_at?->diffForHumans() ?? '-'),
+                    ->content(fn(?Instance $record): string => $record?->created_at?->diffForHumans() ?? '-'),
 
                 Placeholder::make('updated_at')
                     ->label('Last Modified Date')
-                    ->content(fn(?WebhookCall $record): string => $record?->updated_at?->diffForHumans() ?? '-'),
+                    ->content(fn(?Instance $record): string => $record?->updated_at?->diffForHumans() ?? '-'),
+
+                TextInput::make('name')
+                    ->required(),
+
+                TextInput::make('status')
+                    ->required(),
+
+                TextInput::make('instance_id')
+                    ->required(),
             ]);
     }
 
@@ -57,15 +50,13 @@ class WebhookCallResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('id'),
                 TextColumn::make('name')
                     ->searchable()
                     ->sortable(),
 
-                TextColumn::make('url'),
-                TextColumn::make('created_at')
-                    ->dateTime()
-                    ->columnSpanFull(),
+                TextColumn::make('status'),
+
+                TextColumn::make('instance_id'),
             ])
             ->filters([
                 //
@@ -84,8 +75,9 @@ class WebhookCallResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListWebhookCalls::route('/'),
-            'view' => Pages\ViewWebhookCall::route('/{record}/view'),
+            'index' => Pages\ListInstances::route('/'),
+            'create' => Pages\CreateInstance::route('/create'),
+            'edit' => Pages\EditInstance::route('/{record}/edit'),
         ];
     }
 
