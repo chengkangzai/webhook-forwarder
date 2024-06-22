@@ -23,6 +23,6 @@ class Site extends Model
 
     public function instances(): BelongsToMany
     {
-        return $this->belongsToMany(Instance::class)->withPivot('is_active');
+        return $this->belongsToMany(Instance::class);
     }
 }

@@ -18,6 +18,10 @@ class SitesRelationManager extends RelationManager
     {
         return $form
             ->schema([
+                Forms\Components\TextInput::make('name')
+                    ->required()
+                    ->maxLength(255),
+
                 Forms\Components\TextInput::make('url')
                     ->required()
                     ->maxLength(255),
@@ -32,6 +36,7 @@ class SitesRelationManager extends RelationManager
         return $table
             ->recordTitleAttribute('url')
             ->columns([
+                Tables\Columns\TextColumn::make('name'),
                 Tables\Columns\TextColumn::make('url'),
             ])
             ->filters([
