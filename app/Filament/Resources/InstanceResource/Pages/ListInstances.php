@@ -3,7 +3,9 @@
 namespace App\Filament\Resources\InstanceResource\Pages;
 
 use App\Filament\Resources\InstanceResource;
-use Filament\Actions\CreateAction;
+use App\Services\ImportGreenApiInstance;
+use Filament\Actions\Action;
+use Filament\Notifications\Notification;
 use Filament\Resources\Pages\ListRecords;
 
 class ListInstances extends ListRecords
@@ -13,7 +15,15 @@ class ListInstances extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-            CreateAction::make(),
+            Action::make('refresh')
+                ->action(function () {
+                    app(ImportGreenApiInstance::class)->execute();
+
+                    Notification::make('success')
+                        ->success()
+                        ->title('Import/Update Successfully')
+                        ->send();
+                }),
         ];
     }
 }

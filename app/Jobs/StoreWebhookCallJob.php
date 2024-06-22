@@ -6,7 +6,6 @@ use App\Models\WebhookCall;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Http\Request;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 
@@ -21,10 +20,7 @@ class StoreWebhookCallJob implements ShouldQueue
         public array $payload,
         public string $url,
         public array $headers,
-    )
-    {
-
-    }
+    ) {}
 
     public function handle(): void
     {

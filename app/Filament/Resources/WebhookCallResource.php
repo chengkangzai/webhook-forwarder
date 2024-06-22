@@ -16,7 +16,6 @@ use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 
-
 class WebhookCallResource extends Resource
 {
     protected static ?string $model = WebhookCall::class;
@@ -45,11 +44,11 @@ class WebhookCallResource extends Resource
 
                 Placeholder::make('created_at')
                     ->label('Created Date')
-                    ->content(fn(?WebhookCall $record): string => $record?->created_at?->diffForHumans() ?? '-'),
+                    ->content(fn (?WebhookCall $record): string => $record?->created_at?->diffForHumans() ?? '-'),
 
                 Placeholder::make('updated_at')
                     ->label('Last Modified Date')
-                    ->content(fn(?WebhookCall $record): string => $record?->updated_at?->diffForHumans() ?? '-'),
+                    ->content(fn (?WebhookCall $record): string => $record?->updated_at?->diffForHumans() ?? '-'),
             ]);
     }
 

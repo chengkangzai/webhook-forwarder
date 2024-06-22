@@ -4,9 +4,9 @@ namespace App\Filament\Resources\InstanceResource\Pages;
 
 use App\Filament\Resources\InstanceResource;
 use Filament\Actions\DeleteAction;
-use Filament\Resources\Pages\EditRecord;
+use Filament\Resources\Pages\ViewRecord;
 
-class EditInstance extends EditRecord
+class ViewInstance extends ViewRecord
 {
     protected static string $resource = InstanceResource::class;
 

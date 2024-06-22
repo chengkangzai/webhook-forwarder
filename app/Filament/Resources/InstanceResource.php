@@ -2,17 +2,19 @@
 
 namespace App\Filament\Resources;
 
+use App\Enums\InstanceStatus;
 use App\Filament\Resources\InstanceResource\Pages;
 use App\Models\Instance;
 use Filament\Forms\Components\Placeholder;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables\Actions\BulkActionGroup;
 use Filament\Tables\Actions\DeleteAction;
 use Filament\Tables\Actions\DeleteBulkAction;
-use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 
 class InstanceResource extends Resource
@@ -29,17 +31,18 @@ class InstanceResource extends Resource
             ->schema([
                 Placeholder::make('created_at')
                     ->label('Created Date')
-                    ->content(fn(?Instance $record): string => $record?->created_at?->diffForHumans() ?? '-'),
+                    ->content(fn (?Instance $record): string => $record?->created_at?->diffForHumans() ?? '-'),
 
                 Placeholder::make('updated_at')
                     ->label('Last Modified Date')
-                    ->content(fn(?Instance $record): string => $record?->updated_at?->diffForHumans() ?? '-'),
+                    ->content(fn (?Instance $record): string => $record?->updated_at?->diffForHumans() ?? '-'),
 
                 TextInput::make('name')
                     ->required(),
 
-                TextInput::make('status')
-                    ->required(),
+                                Select::make('status')
+                                    ->options(InstanceStatus::class)
+                                    ->required(),
 
                 TextInput::make('instance_id')
                     ->required(),
@@ -50,19 +53,23 @@ class InstanceResource extends Resource
     {
         return $table
             ->columns([
+                TextColumn::make('instance_id')
+                    ->searchable(),
+
                 TextColumn::make('name')
                     ->searchable()
                     ->sortable(),
 
-                TextColumn::make('status'),
+                TextColumn::make('status')
+                    ->badge(),
 
-                TextColumn::make('instance_id'),
             ])
             ->filters([
-                //
+                SelectFilter::make('status')
+                    ->default(InstanceStatus::ACTIVE->value)
+                    ->options(InstanceStatus::class),
             ])
             ->actions([
-                EditAction::make(),
                 DeleteAction::make(),
             ])
             ->bulkActions([
@@ -76,8 +83,7 @@ class InstanceResource extends Resource
     {
         return [
             'index' => Pages\ListInstances::route('/'),
-            'create' => Pages\CreateInstance::route('/create'),
-            'edit' => Pages\EditInstance::route('/{record}/edit'),
+            'view' => Pages\ViewInstance::route('/{record}/view'),
         ];
     }
 
