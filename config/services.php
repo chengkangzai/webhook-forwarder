@@ -35,4 +35,9 @@ return [
         ],
     ],
 
+    'green-api' => [
+        'partner_token' => env('GREEN_API_PARTNER_SECRET'),
+        'secret' => env('GREEN_API_SECRET'),
+    ],
+
 ];
