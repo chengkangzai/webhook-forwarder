@@ -21,7 +21,8 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Toggle::configureUsing(function (Toggle $toggle): void {
-           $toggle->inline(false);
+            $toggle->inline(false)
+                ->default(true);
         });
     }
 }

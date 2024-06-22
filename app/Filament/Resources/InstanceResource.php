@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Enums\InstanceStatus;
 use App\Filament\Resources\InstanceResource\Pages;
+use App\Filament\Resources\InstanceResource\RelationManagers\SitesRelationManager;
 use App\Models\Instance;
 use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Select;
@@ -31,18 +32,18 @@ class InstanceResource extends Resource
             ->schema([
                 Placeholder::make('created_at')
                     ->label('Created Date')
-                    ->content(fn (?Instance $record): string => $record?->created_at?->diffForHumans() ?? '-'),
+                    ->content(fn(?Instance $record): string => $record?->created_at?->diffForHumans() ?? '-'),
 
                 Placeholder::make('updated_at')
                     ->label('Last Modified Date')
-                    ->content(fn (?Instance $record): string => $record?->updated_at?->diffForHumans() ?? '-'),
+                    ->content(fn(?Instance $record): string => $record?->updated_at?->diffForHumans() ?? '-'),
 
                 TextInput::make('name')
                     ->required(),
 
-                                Select::make('status')
-                                    ->options(InstanceStatus::class)
-                                    ->required(),
+                Select::make('status')
+                    ->options(InstanceStatus::class)
+                    ->required(),
 
                 TextInput::make('instance_id')
                     ->required(),
@@ -90,5 +91,12 @@ class InstanceResource extends Resource
     public static function getGloballySearchableAttributes(): array
     {
         return ['name'];
+    }
+
+    public static function getRelations(): array
+    {
+        return [
+            SitesRelationManager::class
+        ];
     }
 }

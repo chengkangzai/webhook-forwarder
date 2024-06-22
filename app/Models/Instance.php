@@ -32,6 +32,6 @@ class Instance extends Model
 
     public function sites(): BelongsToMany
     {
-        return $this->belongsToMany(Site::class);
+        return $this->belongsToMany(Site::class)->withPivot('is_active');
     }
 }

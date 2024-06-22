@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 class Site extends Model
 {
     protected $fillable = [
+        'name',
         'url',
         'is_active',
     ];
@@ -22,6 +23,6 @@ class Site extends Model
 
     public function instances(): BelongsToMany
     {
-        return $this->belongsToMany(Instance::class);
+        return $this->belongsToMany(Instance::class)->withPivot('is_active');
     }
 }

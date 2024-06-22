@@ -11,7 +11,7 @@ return new class extends Migration {
     {
         Schema::create('instance_site', function (Blueprint $table) {
             $table->id();
-            $table->boolean('is_active');
+            $table->boolean('is_active')->default(true);
             $table->foreignIdFor(Instance::class);
             $table->foreignIdFor(Site::class);
         });

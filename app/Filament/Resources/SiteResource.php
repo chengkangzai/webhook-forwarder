@@ -37,6 +37,9 @@ class SiteResource extends Resource
                     ->columnSpanFull()
                     ->required(),
 
+                TextInput::make('name')
+                    ->required(),
+
                 TextInput::make('url')
                     ->required()
                     ->url(),
@@ -55,7 +58,10 @@ class SiteResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('url'),
+                TextColumn::make('name')
+                    ->searchable(),
+                TextColumn::make('url')
+                    ->searchable(),
 
                 ToggleColumn::make('is_active'),
 
