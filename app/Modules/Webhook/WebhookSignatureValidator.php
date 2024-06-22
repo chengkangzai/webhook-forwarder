@@ -8,14 +8,13 @@ use Spatie\WebhookClient\WebhookConfig;
 
 class WebhookSignatureValidator implements SignatureValidator
 {
-
     public function isValid(Request $request, WebhookConfig $config): bool
     {
-        if (!config('services.green-api.secret')) {
+        if (! config('services.green-api.secret')) {
             return false;
         }
 
-        if (!$request->bearerToken()) {
+        if (! $request->bearerToken()) {
             return false;
         }
 

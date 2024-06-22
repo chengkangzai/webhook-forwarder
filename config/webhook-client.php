@@ -25,7 +25,7 @@ return [
              *
              * It should implement \Spatie\WebhookClient\SignatureValidator\SignatureValidator
              */
-//            'signature_validator' => \Spatie\WebhookClient\SignatureValidator\DefaultSignatureValidator::class,
+            //            'signature_validator' => \Spatie\WebhookClient\SignatureValidator\DefaultSignatureValidator::class,
             'signature_validator' => \App\Modules\Webhook\WebhookSignatureValidator::class,
 
             /*
@@ -51,7 +51,7 @@ return [
              * To store all headers, set this value to `*`.
              */
             'store_headers' => [
-                '*'
+                '*',
             ],
 
             /*
