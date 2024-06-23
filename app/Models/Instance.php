@@ -34,4 +34,9 @@ class Instance extends Model
     {
         return $this->belongsToMany(Site::class);
     }
+
+    public function activeSites(): BelongsToMany
+    {
+        return $this->belongsToMany(Site::class)->where('is_active', true);
+    }
 }

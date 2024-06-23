@@ -3,6 +3,7 @@
 namespace App\Filament\Resources;
 
 use App\Enums\InstanceStatus;
+use App\Filament\Resources\CategoryResource\RelationManagers\WebhooksRelationManager;
 use App\Filament\Resources\InstanceResource\Pages;
 use App\Filament\Resources\InstanceResource\RelationManagers\SitesRelationManager;
 use App\Models\Instance;
@@ -13,7 +14,6 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Support\Enums\FontFamily;
-use Filament\Tables\Actions\Action;
 use Filament\Tables\Actions\BulkAction;
 use Filament\Tables\Actions\BulkActionGroup;
 use Filament\Tables\Actions\DeleteAction;
@@ -37,11 +37,11 @@ class InstanceResource extends Resource
             ->schema([
                 Placeholder::make('created_at')
                     ->label('Created Date')
-                    ->content(fn(?Instance $record): string => $record?->created_at?->diffForHumans() ?? '-'),
+                    ->content(fn (?Instance $record): string => $record?->created_at?->diffForHumans() ?? '-'),
 
                 Placeholder::make('updated_at')
                     ->label('Last Modified Date')
-                    ->content(fn(?Instance $record): string => $record?->updated_at?->diffForHumans() ?? '-'),
+                    ->content(fn (?Instance $record): string => $record?->updated_at?->diffForHumans() ?? '-'),
 
                 TextInput::make('name')
                     ->required(),
@@ -86,14 +86,13 @@ class InstanceResource extends Resource
                     ->form([
                         Select::make('sites')
                             ->multiple()
-                            ->options(fn() => Site::pluck('name', 'id'))
+                            ->options(fn () => Site::pluck('name', 'id')),
                     ])
                     ->action(function (Collection $records, array $data) {
                         $records->each(function (Instance $record) use ($data) {
-                            $record->sites()->syncWithoutDetaching($data    ['sites']);
+                            $record->sites()->syncWithoutDetaching($data['sites']);
                         });
-                    })
-                ,
+                    }),
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),
                 ]),
@@ -117,6 +116,7 @@ class InstanceResource extends Resource
     {
         return [
             SitesRelationManager::class,
+            WebhooksRelationManager::class,
         ];
     }
 }

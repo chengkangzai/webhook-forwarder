@@ -3,15 +3,20 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\WebhookResource\Pages;
+use App\Models\Site;
 use App\Models\Webhook;
 use Filament\Forms\Components\KeyValue;
 use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
+use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
+use Filament\Tables\Actions\Action;
+use Filament\Tables\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use Spatie\WebhookServer\WebhookCall;
 
 class WebhookResource extends Resource
 {
@@ -64,6 +69,8 @@ class WebhookResource extends Resource
                     ->sortable(),
 
                 TextColumn::make('url'),
+                TextColumn::make('instance.name')
+                    ->visible(fn ($livewire) => $livewire instanceof Pages\ListWebhooks),
                 TextColumn::make('created_at')
                     ->dateTime()
                     ->columnSpanFull(),
@@ -73,7 +80,34 @@ class WebhookResource extends Resource
             ])
             ->defaultSort('created_at', 'desc')
             ->actions([
+                ViewAction::make(),
+                Action::make('forward')
+                    ->icon('heroicon-o-arrow-up-right')
+                    ->visible(fn (Webhook $record) => $record->instance_id)
+                    ->form([
+                        Select::make('site')
+                            ->multiple()
+                            ->options(fn (Webhook $record) => $record->instance()->first()->activeSites()->pluck('name', 'sites.id')),
+                    ])
+                    ->action(function (Webhook $webhook, array $data) {
+                        $site = Site::find($data['site']);
 
+                        WebhookCall::create()
+                            ->doNotVerifySsl()
+                            ->url($site->url)
+                            ->payload($webhook->payload)
+                            ->withHeaders([
+                                'authorization' => $webhook->headers['authorization'],
+                            ])
+                            ->doNotSign()
+                            ->dispatchSync();
+
+                        Notification::make('success')
+                            ->success()
+                            ->title('Success')
+                            ->body('Successfully forwarded to '.$site->url)
+                            ->send();
+                    }),
             ])
             ->bulkActions([
                 //
