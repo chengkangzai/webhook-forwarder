@@ -8,5 +8,5 @@ Route::post('/webhook', WebhookController::class)
     ->middleware(VerifyGreenApiWebhookMiddleware::class);
 
 Route::fallback(function () {
-   return redirect()->to(filament()->getUrl());
+    return redirect()->to(filament()->getUrl());
 });
