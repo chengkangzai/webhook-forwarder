@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Enums\WebhookStatus;
 use App\Models\Site;
 use App\Models\Webhook;
 use Illuminate\Bus\Queueable;
@@ -32,6 +33,11 @@ class ForwardWebhookCallJob implements ShouldQueue
                 ])
                 ->doNotSign()
                 ->dispatchSync();
+
+            $this->webhook->update([
+                'status' => WebhookStatus::FORWARDED,
+                'forwarded_at' => now(),
+            ]);
         });
     }
 }

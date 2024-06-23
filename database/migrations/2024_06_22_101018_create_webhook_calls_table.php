@@ -16,7 +16,10 @@ return new class extends Migration
             $table->string('url');
             $table->json('headers')->nullable();
             $table->json('payload')->nullable();
-            $table->text('exception')->nullable();
+            $table->json('exception')->nullable();
+
+            $table->string('status')->nullable();
+            $table->dateTime('forwarded_at')->nullable();
 
             $table->foreignIdFor(Instance::class)->nullable();
 

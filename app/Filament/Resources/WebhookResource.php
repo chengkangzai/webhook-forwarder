@@ -20,6 +20,7 @@ use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Spatie\WebhookServer\WebhookCall;
+use ValentinMorice\FilamentJsonColumn\FilamentJsonColumn;
 
 class WebhookResource extends Resource
 {
@@ -45,20 +46,20 @@ class WebhookResource extends Resource
                     ->required()
                     ->url(),
 
-                KeyValue::make('headers')
-                    ->columnSpanFull(),
-                KeyValue::make('payload')
-                    ->columnSpanFull(),
+                FilamentJsonColumn::make('headers')
+                    ->viewerOnly(),
+                FilamentJsonColumn::make('payload')
+                    ->viewerOnly(),
                 KeyValue::make('exception')
                     ->columnSpanFull(),
 
                 Placeholder::make('created_at')
                     ->label('Created Date')
-                    ->content(fn (?Webhook $record): string => $record?->created_at?->diffForHumans() ?? '-'),
+                    ->content(fn(?Webhook $record): string => $record?->created_at?->diffForHumans() ?? '-'),
 
                 Placeholder::make('updated_at')
                     ->label('Last Modified Date')
-                    ->content(fn (?Webhook $record): string => $record?->updated_at?->diffForHumans() ?? '-'),
+                    ->content(fn(?Webhook $record): string => $record?->updated_at?->diffForHumans() ?? '-'),
             ]);
     }
 
@@ -73,7 +74,7 @@ class WebhookResource extends Resource
 
                 TextColumn::make('url'),
                 TextColumn::make('instance.name')
-                    ->visible(fn ($livewire) => $livewire instanceof Pages\ListWebhooks),
+                    ->visible(fn($livewire) => $livewire instanceof Pages\ListWebhooks),
                 TextColumn::make('created_at')
                     ->dateTime()
                     ->columnSpanFull(),
@@ -95,11 +96,11 @@ class WebhookResource extends Resource
                 ViewAction::make(),
                 Action::make('forward')
                     ->icon('heroicon-o-arrow-up-right')
-                    ->visible(fn (Webhook $record) => $record->instance_id !== null)
+                    ->visible(fn(Webhook $record) => $record->instance_id !== null)
                     ->form([
                         Select::make('site')
                             ->multiple()
-                            ->options(fn (Webhook $record) => $record->instance()->first()->activeSites()->pluck('name', 'sites.id')),
+                            ->options(fn(Webhook $record) => $record->instance()->first()->activeSites()->pluck('name', 'sites.id')),
                     ])
                     ->action(function (Webhook $webhook, array $data) {
                         $sites = Site::find($data['site']);
@@ -115,10 +116,10 @@ class WebhookResource extends Resource
                                 ->doNotSign()
                                 ->dispatchSync();
 
-                            Notification::make('success'.$site->id)
+                            Notification::make('success' . $site->id)
                                 ->success()
                                 ->title('Success')
-                                ->body('Successfully forwarded to '.$site->url)
+                                ->body('Successfully forwarded to ' . $site->url)
                                 ->send();
                         }
                     }),

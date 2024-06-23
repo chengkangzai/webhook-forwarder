@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Enums\WebhookStatus;
 use App\Models\Instance;
 use App\Models\Webhook;
 use Illuminate\Bus\Queueable;
@@ -33,6 +34,7 @@ class StoreWebhookCallJob implements ShouldQueue
                 'url' => $this->url,
                 'headers' => $this->headers,
                 'payload' => $this->payload,
+                'status' => WebhookStatus::PENDING,
             ]);
 
             return;
@@ -44,6 +46,7 @@ class StoreWebhookCallJob implements ShouldQueue
             'headers' => $this->headers,
             'payload' => $this->payload,
             'instance_id' => $instance->id,
+            'status' => WebhookStatus::PENDING,
         ]);
 
         dispatch(new ForwardWebhookCallJob($webhook));
