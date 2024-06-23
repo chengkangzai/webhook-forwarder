@@ -11,6 +11,7 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
+use Filament\Support\Enums\FontFamily;
 use Filament\Tables\Actions\BulkActionGroup;
 use Filament\Tables\Actions\DeleteAction;
 use Filament\Tables\Actions\DeleteBulkAction;
@@ -55,6 +56,7 @@ class InstanceResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('instance_id')
+                    ->fontFamily(FontFamily::Mono)
                     ->searchable(),
 
                 TextColumn::make('name')
