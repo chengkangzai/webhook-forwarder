@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources;
 
+use App\Enums\InstanceStatus;
 use App\Filament\Resources\WebhookResource\Pages;
 use App\Models\Site;
 use App\Models\Webhook;
@@ -13,9 +14,12 @@ use Filament\Forms\Form;
 use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
 use Filament\Tables\Actions\Action;
+use Filament\Tables\Actions\BulkAction;
 use Filament\Tables\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 use Spatie\WebhookServer\WebhookCall;
 
 class WebhookResource extends Resource
@@ -75,8 +79,17 @@ class WebhookResource extends Resource
                     ->dateTime()
                     ->columnSpanFull(),
             ])
+            ->filtersFormColumns(2)
             ->filters([
-                //
+                SelectFilter::make('instance_id')
+                    ->columnSpanFull()
+                    ->label('instance')
+                    ->multiple()
+                ->relationship('instance', 'name',function (Builder $query){
+                    $query->where('status',InstanceStatus::ACTIVE);
+                })
+                    ->preload()
+                ->searchable()
             ])
             ->defaultSort('created_at', 'desc')
             ->actions([
@@ -112,7 +125,7 @@ class WebhookResource extends Resource
                     }),
             ])
             ->bulkActions([
-                //
+
             ]);
     }
 
