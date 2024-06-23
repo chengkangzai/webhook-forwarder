@@ -3,7 +3,7 @@
 namespace App\Jobs;
 
 use App\Models\Instance;
-use App\Models\WebhookCall;
+use App\Models\Webhook;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -27,14 +27,26 @@ class StoreWebhookCallJob implements ShouldQueue
 
     public function handle(): void
     {
-        Instance::where('instance_id', $this->payload['instanceData']['idInstance'])
-            ->first()
-            ->webhookCalls()
-            ->create([
+        $instance = Instance::where('instance_id', 1101823699)->first();
+
+        if ($instance === null) {
+             Webhook::create([
                 'name' => 'default',
                 'url' => $this->url,
                 'headers' => $this->headers,
                 'payload' => $this->payload,
             ]);
+             return ;
+        }
+
+        $webhook = Webhook::create([
+            'name' => 'default',
+            'url' => $this->url,
+            'headers' => $this->headers,
+            'payload' => $this->payload,
+            'instance_id' => $instance->id,
+        ]);
+
+        dispatch(new ForwardWebhookCallJob($webhook));
     }
 }

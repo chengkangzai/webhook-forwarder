@@ -25,9 +25,9 @@ class Instance extends Model
         ];
     }
 
-    public function webhookCalls(): HasMany
+    public function webhooks(): HasMany
     {
-        return $this->hasMany(WebhookCall::class);
+        return $this->hasMany(Webhook::class);
     }
 
     public function sites(): BelongsToMany

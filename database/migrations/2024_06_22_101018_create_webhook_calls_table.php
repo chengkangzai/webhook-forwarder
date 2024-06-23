@@ -9,7 +9,7 @@ return new class extends Migration
 {
     public function up()
     {
-        Schema::create('webhook_calls', function (Blueprint $table) {
+        Schema::create('webhooks', function (Blueprint $table) {
             $table->id();
 
             $table->string('name');
@@ -18,7 +18,7 @@ return new class extends Migration
             $table->json('payload')->nullable();
             $table->text('exception')->nullable();
 
-            $table->foreignId(Instance::class)->nullable();
+            $table->foreignIdFor(Instance::class)->nullable();
 
             $table->timestamps();
         });
