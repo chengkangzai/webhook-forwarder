@@ -50,11 +50,11 @@ class WebhookResource extends Resource
 
                 Placeholder::make('created_at')
                     ->label('Created Date')
-                    ->content(fn (?Webhook $record): string => $record?->created_at?->diffForHumans() ?? '-'),
+                    ->content(fn(?Webhook $record): string => $record?->created_at?->diffForHumans() ?? '-'),
 
                 Placeholder::make('updated_at')
                     ->label('Last Modified Date')
-                    ->content(fn (?Webhook $record): string => $record?->updated_at?->diffForHumans() ?? '-'),
+                    ->content(fn(?Webhook $record): string => $record?->updated_at?->diffForHumans() ?? '-'),
             ]);
     }
 
@@ -75,14 +75,12 @@ class WebhookResource extends Resource
             ->filters([
                 //
             ])
+            ->defaultSort('created_at', 'desc')
             ->actions([
-                EditAction::make(),
-                DeleteAction::make(),
+
             ])
             ->bulkActions([
-                BulkActionGroup::make([
-                    DeleteBulkAction::make(),
-                ]),
+                //
             ]);
     }
 
