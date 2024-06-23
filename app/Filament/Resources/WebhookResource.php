@@ -6,6 +6,7 @@ use App\Filament\Resources\WebhookResource\Pages;
 use App\Models\Webhook;
 use Filament\Forms\Components\KeyValue;
 use Filament\Forms\Components\Placeholder;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -28,6 +29,11 @@ class WebhookResource extends Resource
     {
         return $form
             ->schema([
+                Select::make('instance_id')
+                    ->columnSpanFull()
+                    ->relationship('instance', 'name')
+                    ->required(),
+
                 TextInput::make('name')
                     ->required(),
 

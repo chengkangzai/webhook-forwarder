@@ -9,6 +9,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Spatie\WebhookServer\WebhookCall;
 
 class ForwardWebhookCallJob implements ShouldQueue
 {
@@ -17,20 +18,22 @@ class ForwardWebhookCallJob implements ShouldQueue
     use Queueable;
     use SerializesModels;
 
-    public function __construct(private readonly Webhook $webhookCall)
+    public function __construct(private readonly Webhook $webhook)
     {
     }
 
     public function handle(): void
     {
-        info('RUNING');
-        $this->webhookCall->instance()->first()->sites()->each(function (Site $site) {
-        info('url : '.$site->url);
-            \Spatie\WebhookServer\WebhookCall::create()
+        $this->webhook->instance()->first()->sites()->each(function (Site $site) {
+            WebhookCall::create()
+                ->doNotVerifySsl()
                 ->url($site->url)
-                ->payload($this->webhookCall->payload)
-                ->useSecret(config('services.green-api.secret'))
-                ->dispatch();
+                ->payload($this->webhook->payload)
+                ->withHeaders([
+                    'authorization' => $this->webhook->headers['authorization']
+                ])
+                ->doNotSign()
+                ->dispatchSync();
         });
     }
 }
