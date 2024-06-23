@@ -72,6 +72,7 @@ class WebhookResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            ->poll()
             ->columns([
                 TextColumn::make('id'),
                 TextColumn::make('name')
