@@ -6,18 +6,22 @@ use App\Enums\InstanceStatus;
 use App\Filament\Resources\InstanceResource\Pages;
 use App\Filament\Resources\InstanceResource\RelationManagers\SitesRelationManager;
 use App\Models\Instance;
+use App\Models\Site;
 use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Support\Enums\FontFamily;
+use Filament\Tables\Actions\Action;
+use Filament\Tables\Actions\BulkAction;
 use Filament\Tables\Actions\BulkActionGroup;
 use Filament\Tables\Actions\DeleteAction;
 use Filament\Tables\Actions\DeleteBulkAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
+use Illuminate\Support\Collection;
 
 class InstanceResource extends Resource
 {
@@ -33,11 +37,11 @@ class InstanceResource extends Resource
             ->schema([
                 Placeholder::make('created_at')
                     ->label('Created Date')
-                    ->content(fn (?Instance $record): string => $record?->created_at?->diffForHumans() ?? '-'),
+                    ->content(fn(?Instance $record): string => $record?->created_at?->diffForHumans() ?? '-'),
 
                 Placeholder::make('updated_at')
                     ->label('Last Modified Date')
-                    ->content(fn (?Instance $record): string => $record?->updated_at?->diffForHumans() ?? '-'),
+                    ->content(fn(?Instance $record): string => $record?->updated_at?->diffForHumans() ?? '-'),
 
                 TextInput::make('name')
                     ->required(),
@@ -66,6 +70,8 @@ class InstanceResource extends Resource
                 TextColumn::make('status')
                     ->badge(),
 
+                TextColumn::make('sites_count')
+                    ->counts('sites'),
             ])
             ->filters([
                 SelectFilter::make('status')
@@ -76,6 +82,18 @@ class InstanceResource extends Resource
                 DeleteAction::make(),
             ])
             ->bulkActions([
+                BulkAction::make('bulk_assign_site')
+                    ->form([
+                        Select::make('sites')
+                            ->multiple()
+                            ->options(fn() => Site::pluck('name', 'id'))
+                    ])
+                    ->action(function (Collection $records, array $data) {
+                        $records->each(function (Instance $record) use ($data) {
+                            $record->sites()->syncWithoutDetaching($data    ['sites']);
+                        });
+                    })
+                ,
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),
                 ]),
