@@ -10,14 +10,13 @@ use Filament\Forms\Components\Select;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\ViewRecord;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Http;
 use Spatie\WebhookServer\WebhookCall;
 
 class ViewWebhook extends ViewRecord
 {
     protected static string $resource = WebhookResource::class;
 
-    /** @var Model|int|string|null|Webhook $record */
+    /** @var Model|int|string|null|Webhook */
     public Model|int|string|null $record;
 
     protected function getHeaderActions(): array
@@ -28,7 +27,7 @@ class ViewWebhook extends ViewRecord
                     Select::make('site')
                         ->options(function () {
                             return $this->record->instance()->first()->sites()->pluck('name', 'sites.id');
-                        })
+                        }),
                 ])
                 ->action(function (Webhook $webhook, array $data) {
                     $site = Site::find($data['site']);
@@ -38,7 +37,7 @@ class ViewWebhook extends ViewRecord
                         ->url($site->url)
                         ->payload($webhook->payload)
                         ->withHeaders([
-                            'authorization' => $webhook->headers['authorization']
+                            'authorization' => $webhook->headers['authorization'],
                         ])
                         ->doNotSign()
                         ->dispatchSync();
@@ -46,9 +45,9 @@ class ViewWebhook extends ViewRecord
                     Notification::make('success')
                         ->success()
                         ->title('Success')
-                        ->body('Successfully forwarded to ' . $site->url)
+                        ->body('Successfully forwarded to '.$site->url)
                         ->send();
-                })
+                }),
         ];
     }
 }

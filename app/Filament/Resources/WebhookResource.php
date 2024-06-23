@@ -10,10 +10,6 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
-use Filament\Tables\Actions\BulkActionGroup;
-use Filament\Tables\Actions\DeleteAction;
-use Filament\Tables\Actions\DeleteBulkAction;
-use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 
@@ -50,11 +46,11 @@ class WebhookResource extends Resource
 
                 Placeholder::make('created_at')
                     ->label('Created Date')
-                    ->content(fn(?Webhook $record): string => $record?->created_at?->diffForHumans() ?? '-'),
+                    ->content(fn (?Webhook $record): string => $record?->created_at?->diffForHumans() ?? '-'),
 
                 Placeholder::make('updated_at')
                     ->label('Last Modified Date')
-                    ->content(fn(?Webhook $record): string => $record?->updated_at?->diffForHumans() ?? '-'),
+                    ->content(fn (?Webhook $record): string => $record?->updated_at?->diffForHumans() ?? '-'),
             ]);
     }
 

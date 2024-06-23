@@ -18,9 +18,7 @@ class ForwardWebhookCallJob implements ShouldQueue
     use Queueable;
     use SerializesModels;
 
-    public function __construct(private readonly Webhook $webhook)
-    {
-    }
+    public function __construct(private readonly Webhook $webhook) {}
 
     public function handle(): void
     {
@@ -30,7 +28,7 @@ class ForwardWebhookCallJob implements ShouldQueue
                 ->url($site->url)
                 ->payload($this->webhook->payload)
                 ->withHeaders([
-                    'authorization' => $this->webhook->headers['authorization']
+                    'authorization' => $this->webhook->headers['authorization'],
                 ])
                 ->doNotSign()
                 ->dispatchSync();

@@ -33,11 +33,11 @@ class InstanceResource extends Resource
             ->schema([
                 Placeholder::make('created_at')
                     ->label('Created Date')
-                    ->content(fn(?Instance $record): string => $record?->created_at?->diffForHumans() ?? '-'),
+                    ->content(fn (?Instance $record): string => $record?->created_at?->diffForHumans() ?? '-'),
 
                 Placeholder::make('updated_at')
                     ->label('Last Modified Date')
-                    ->content(fn(?Instance $record): string => $record?->updated_at?->diffForHumans() ?? '-'),
+                    ->content(fn (?Instance $record): string => $record?->updated_at?->diffForHumans() ?? '-'),
 
                 TextInput::make('name')
                     ->required(),
@@ -98,7 +98,7 @@ class InstanceResource extends Resource
     public static function getRelations(): array
     {
         return [
-            SitesRelationManager::class
+            SitesRelationManager::class,
         ];
     }
 }

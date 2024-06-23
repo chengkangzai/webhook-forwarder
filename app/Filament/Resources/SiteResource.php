@@ -5,7 +5,6 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\SiteResource\Pages;
 use App\Models\Site;
 use Filament\Forms\Components\Placeholder;
-use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Forms\Form;
@@ -17,8 +16,6 @@ use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ToggleColumn;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
 
 class SiteResource extends Resource
 {
@@ -46,11 +43,11 @@ class SiteResource extends Resource
 
                 Placeholder::make('created_at')
                     ->label('Created Date')
-                    ->content(fn(?Site $record): string => $record?->created_at?->diffForHumans() ?? '-'),
+                    ->content(fn (?Site $record): string => $record?->created_at?->diffForHumans() ?? '-'),
 
                 Placeholder::make('updated_at')
                     ->label('Last Modified Date')
-                    ->content(fn(?Site $record): string => $record?->updated_at?->diffForHumans() ?? '-'),
+                    ->content(fn (?Site $record): string => $record?->updated_at?->diffForHumans() ?? '-'),
             ]);
     }
 
@@ -66,7 +63,7 @@ class SiteResource extends Resource
                 ToggleColumn::make('is_active'),
 
                 TextColumn::make('instances_count')
-                    ->counts('instances')
+                    ->counts('instances'),
             ])
             ->filters([
                 //

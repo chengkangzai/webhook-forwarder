@@ -18,25 +18,24 @@ class StoreWebhookCallJob implements ShouldQueue
     use SerializesModels;
 
     public function __construct(
-        public array  $payload,
+        public array $payload,
         public string $url,
-        public array  $headers,
-    )
-    {
-    }
+        public array $headers,
+    ) {}
 
     public function handle(): void
     {
         $instance = Instance::where('instance_id', 1101823699)->first();
 
         if ($instance === null) {
-             Webhook::create([
+            Webhook::create([
                 'name' => 'default',
                 'url' => $this->url,
                 'headers' => $this->headers,
                 'payload' => $this->payload,
             ]);
-             return ;
+
+            return;
         }
 
         $webhook = Webhook::create([
