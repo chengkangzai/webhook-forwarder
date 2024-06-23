@@ -51,11 +51,11 @@ class WebhookResource extends Resource
 
                 Placeholder::make('created_at')
                     ->label('Created Date')
-                    ->content(fn (?Webhook $record): string => $record?->created_at?->diffForHumans() ?? '-'),
+                    ->content(fn(?Webhook $record): string => $record?->created_at?->diffForHumans() ?? '-'),
 
                 Placeholder::make('updated_at')
                     ->label('Last Modified Date')
-                    ->content(fn (?Webhook $record): string => $record?->updated_at?->diffForHumans() ?? '-'),
+                    ->content(fn(?Webhook $record): string => $record?->updated_at?->diffForHumans() ?? '-'),
             ]);
     }
 
@@ -70,7 +70,7 @@ class WebhookResource extends Resource
 
                 TextColumn::make('url'),
                 TextColumn::make('instance.name')
-                    ->visible(fn ($livewire) => $livewire instanceof Pages\ListWebhooks),
+                    ->visible(fn($livewire) => $livewire instanceof Pages\ListWebhooks),
                 TextColumn::make('created_at')
                     ->dateTime()
                     ->columnSpanFull(),
@@ -83,30 +83,32 @@ class WebhookResource extends Resource
                 ViewAction::make(),
                 Action::make('forward')
                     ->icon('heroicon-o-arrow-up-right')
-                    ->visible(fn (Webhook $record) => $record->instance_id)
+                    ->visible(fn(Webhook $record) => $record->instance_id !== null)
                     ->form([
                         Select::make('site')
                             ->multiple()
-                            ->options(fn (Webhook $record) => $record->instance()->first()->activeSites()->pluck('name', 'sites.id')),
+                            ->options(fn(Webhook $record) => $record->instance()->first()->activeSites()->pluck('name', 'sites.id')),
                     ])
                     ->action(function (Webhook $webhook, array $data) {
-                        $site = Site::find($data['site']);
+                        $sites = Site::find($data['site']);
 
-                        WebhookCall::create()
-                            ->doNotVerifySsl()
-                            ->url($site->url)
-                            ->payload($webhook->payload)
-                            ->withHeaders([
-                                'authorization' => $webhook->headers['authorization'],
-                            ])
-                            ->doNotSign()
-                            ->dispatchSync();
+                        foreach ($sites as $site) {
+                            WebhookCall::create()
+                                ->doNotVerifySsl()
+                                ->url($site->url)
+                                ->payload($webhook->payload)
+                                ->withHeaders([
+                                    'authorization' => $webhook->headers['authorization'],
+                                ])
+                                ->doNotSign()
+                                ->dispatchSync();
 
-                        Notification::make('success')
-                            ->success()
-                            ->title('Success')
-                            ->body('Successfully forwarded to '.$site->url)
-                            ->send();
+                            Notification::make('success'.$site->id)
+                                ->success()
+                                ->title('Success')
+                                ->body('Successfully forwarded to ' . $site->url)
+                                ->send();
+                        }
                     }),
             ])
             ->bulkActions([

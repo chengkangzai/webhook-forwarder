@@ -20,26 +20,28 @@ class ViewWebhook extends ViewRecord
         return Action::make('forward')
             ->form([
                 Select::make('site')
-                    ->options(fn (Webhook $record) => $record->instance()->first()->activeSites()->pluck('name', 'sites.id')),
+                    ->multiple()
+                    ->options(fn(Webhook $record) => $record->instance()->first()->activeSites()->pluck('name', 'sites.id')),
             ])
             ->action(function (Webhook $webhook, array $data) {
-                $site = Site::find($data['site']);
+                $sites = Site::find($data['site']);
+                foreach ($sites as $site) {
+                    WebhookCall::create()
+                        ->doNotVerifySsl()
+                        ->url($site->url)
+                        ->payload($webhook->payload)
+                        ->withHeaders([
+                            'authorization' => $webhook->headers['authorization'],
+                        ])
+                        ->doNotSign()
+                        ->dispatchSync();
 
-                WebhookCall::create()
-                    ->doNotVerifySsl()
-                    ->url($site->url)
-                    ->payload($webhook->payload)
-                    ->withHeaders([
-                        'authorization' => $webhook->headers['authorization'],
-                    ])
-                    ->doNotSign()
-                    ->dispatchSync();
-
-                Notification::make('success')
-                    ->success()
-                    ->title('Success')
-                    ->body('Successfully forwarded to '.$site->url)
-                    ->send();
+                    Notification::make('success'.$site->id)
+                        ->success()
+                        ->title('Success')
+                        ->body('Successfully forwarded to ' . $site->url)
+                        ->send();
+                }
             });
     }
 
