@@ -7,6 +7,6 @@ use Illuminate\Support\Facades\Route;
 Route::post('/webhook', WebhookController::class)
     ->middleware(VerifyGreenApiWebhookMiddleware::class);
 
-Route::get('/', function () {
-    return view('welcome');
+Route::fallback(function () {
+   return redirect()->to(filament()->getUrl());
 });
