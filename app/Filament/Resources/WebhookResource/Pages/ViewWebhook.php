@@ -21,7 +21,7 @@ class ViewWebhook extends ViewRecord
             ->form([
                 Select::make('site')
                     ->multiple()
-                    ->options(fn(Webhook $record) => $record->instance()->first()->activeSites()->pluck('name', 'sites.id')),
+                    ->options(fn (Webhook $record) => $record->instance()->first()->activeSites()->pluck('name', 'sites.id')),
             ])
             ->action(function (Webhook $webhook, array $data) {
                 $sites = Site::find($data['site']);
@@ -39,7 +39,7 @@ class ViewWebhook extends ViewRecord
                     Notification::make('success'.$site->id)
                         ->success()
                         ->title('Success')
-                        ->body('Successfully forwarded to ' . $site->url)
+                        ->body('Successfully forwarded to '.$site->url)
                         ->send();
                 }
             });
