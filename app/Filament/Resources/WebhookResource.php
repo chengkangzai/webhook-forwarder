@@ -3,6 +3,7 @@
 namespace App\Filament\Resources;
 
 use App\Enums\InstanceStatus;
+use App\Enums\WebhookStatus;
 use App\Filament\Resources\WebhookResource\Pages;
 use App\Models\Site;
 use App\Models\Webhook;
@@ -45,6 +46,11 @@ class WebhookResource extends Resource
                 TextInput::make('url')
                     ->required()
                     ->url(),
+
+                Select::make('status')
+                    ->options(WebhookStatus::class),
+
+                TextInput::make('forwarded_at'),
 
                 FilamentJsonColumn::make('headers')
                     ->viewerOnly(),
