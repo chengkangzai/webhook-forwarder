@@ -107,6 +107,7 @@ class WebhookResource extends Resource
                     ->searchable(),
 
                 SelectFilter::make('status')
+                    ->columnSpanFull()
                     ->options(WebhookStatus::class),
             ])
             ->defaultSort('created_at', 'desc')
