@@ -14,6 +14,7 @@ use Filament\Tables\Actions\DeleteAction;
 use Filament\Tables\Actions\DeleteBulkAction;
 use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\TextInputColumn;
 use Filament\Tables\Columns\ToggleColumn;
 use Filament\Tables\Table;
 
@@ -57,10 +58,14 @@ class SiteResource extends Resource
             ->columns([
                 TextColumn::make('name')
                     ->searchable(),
-                TextColumn::make('url')
+                TextInputColumn::make('url')
+                    ->extraAttributes([
+                        'class' => 'w-full',
+                    ])
                     ->searchable(),
 
-                ToggleColumn::make('is_active'),
+                ToggleColumn::make('is_active')
+                    ->label('Activate'),
 
                 TextColumn::make('instances_count')
                     ->counts('instances'),
