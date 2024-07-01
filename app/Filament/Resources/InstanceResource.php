@@ -71,6 +71,7 @@ class InstanceResource extends Resource
                     ->badge(),
 
                 TextColumn::make('sites_count')
+                    ->sortable()
                     ->counts('sites'),
             ])
             ->filters([
