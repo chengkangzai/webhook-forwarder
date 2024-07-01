@@ -97,13 +97,17 @@ class WebhookResource extends Resource
             ->filters([
                 SelectFilter::make('instance_id')
                     ->columnSpanFull()
-                    ->label('instance')
+                    ->label('Instance')
                     ->multiple()
                     ->relationship('instance', 'name', function (Builder $query) {
-                        $query->where('status', InstanceStatus::ACTIVE);
+                        $query->where('status', InstanceStatus::ACTIVE)
+                            ->whereHas('webhooks');
                     })
                     ->preload()
                     ->searchable(),
+
+                SelectFilter::make('status')
+                    ->options(WebhookStatus::class),
             ])
             ->defaultSort('created_at', 'desc')
             ->actions([
