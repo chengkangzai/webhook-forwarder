@@ -44,11 +44,11 @@ class SiteResource extends Resource
 
                 Placeholder::make('created_at')
                     ->label('Created Date')
-                    ->content(fn (?Site $record): string => $record?->created_at?->diffForHumans() ?? '-'),
+                    ->content(fn(?Site $record): string => $record?->created_at?->diffForHumans() ?? '-'),
 
                 Placeholder::make('updated_at')
                     ->label('Last Modified Date')
-                    ->content(fn (?Site $record): string => $record?->updated_at?->diffForHumans() ?? '-'),
+                    ->content(fn(?Site $record): string => $record?->updated_at?->diffForHumans() ?? '-'),
             ]);
     }
 
@@ -59,6 +59,9 @@ class SiteResource extends Resource
                 TextColumn::make('name')
                     ->searchable(),
                 TextInputColumn::make('url')
+                    ->rules([
+                        'required', 'url'
+                    ])
                     ->extraAttributes([
                         'class' => 'w-full',
                     ])
