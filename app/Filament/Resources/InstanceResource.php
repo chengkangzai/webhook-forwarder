@@ -8,6 +8,7 @@ use App\Filament\Resources\InstanceResource\Pages;
 use App\Filament\Resources\InstanceResource\RelationManagers\SitesRelationManager;
 use App\Models\Instance;
 use App\Models\Site;
+use Filament\Forms\Components\KeyValue;
 use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
@@ -52,6 +53,8 @@ class InstanceResource extends Resource
 
                 TextInput::make('instance_id')
                     ->required(),
+
+                KeyValue::make('payload')
             ]);
     }
 
