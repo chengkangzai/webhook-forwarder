@@ -38,9 +38,8 @@ class Webhook extends Model
     {
         return $this->belongsTo(Instance::class)
             ->withoutGlobalScopes([
-                SoftDeletingScope::class
-            ])
-            ;
+                SoftDeletingScope::class,
+            ]);
     }
 
     public function prunable(): Builder

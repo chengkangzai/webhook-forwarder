@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Instance extends Model
 {
     use SoftDeletes;
+
     protected $fillable = [
         'instance_token',
         'instance_id',

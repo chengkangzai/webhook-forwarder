@@ -42,11 +42,11 @@ class InstanceResource extends Resource
             ->schema([
                 Placeholder::make('created_at')
                     ->label('Created Date')
-                    ->content(fn(?Instance $record): string => $record?->created_at?->diffForHumans() ?? '-'),
+                    ->content(fn (?Instance $record): string => $record?->created_at?->diffForHumans() ?? '-'),
 
                 Placeholder::make('updated_at')
                     ->label('Last Modified Date')
-                    ->content(fn(?Instance $record): string => $record?->updated_at?->diffForHumans() ?? '-'),
+                    ->content(fn (?Instance $record): string => $record?->updated_at?->diffForHumans() ?? '-'),
 
                 TextInput::make('name')
                     ->required(),
@@ -58,7 +58,7 @@ class InstanceResource extends Resource
                 TextInput::make('instance_id')
                     ->required(),
 
-                KeyValue::make('payload')
+                KeyValue::make('payload'),
             ]);
     }
 
@@ -96,7 +96,7 @@ class InstanceResource extends Resource
                     ->form([
                         Select::make('sites')
                             ->multiple()
-                            ->options(fn() => Site::pluck('name', 'id')),
+                            ->options(fn () => Site::pluck('name', 'id')),
                     ])
                     ->action(function (Collection $records, array $data) {
                         $records->each(function (Instance $record) use ($data) {
@@ -134,7 +134,7 @@ class InstanceResource extends Resource
     {
         return parent::getEloquentQuery()
             ->withoutGlobalScopes([
-                SoftDeletingScope::class
+                SoftDeletingScope::class,
             ]);
     }
 }
