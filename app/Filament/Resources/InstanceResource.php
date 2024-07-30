@@ -21,7 +21,10 @@ use Filament\Tables\Actions\DeleteAction;
 use Filament\Tables\Actions\DeleteBulkAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
+use Filament\Tables\Filters\TrashedFilter;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Collection;
 
 class InstanceResource extends Resource
@@ -38,11 +41,11 @@ class InstanceResource extends Resource
             ->schema([
                 Placeholder::make('created_at')
                     ->label('Created Date')
-                    ->content(fn (?Instance $record): string => $record?->created_at?->diffForHumans() ?? '-'),
+                    ->content(fn(?Instance $record): string => $record?->created_at?->diffForHumans() ?? '-'),
 
                 Placeholder::make('updated_at')
                     ->label('Last Modified Date')
-                    ->content(fn (?Instance $record): string => $record?->updated_at?->diffForHumans() ?? '-'),
+                    ->content(fn(?Instance $record): string => $record?->updated_at?->diffForHumans() ?? '-'),
 
                 TextInput::make('name')
                     ->required(),
@@ -81,6 +84,7 @@ class InstanceResource extends Resource
                 SelectFilter::make('status')
                     ->default(InstanceStatus::ACTIVE->value)
                     ->options(InstanceStatus::class),
+                TrashedFilter::class,
             ])
             ->actions([
                 DeleteAction::make(),
@@ -90,7 +94,7 @@ class InstanceResource extends Resource
                     ->form([
                         Select::make('sites')
                             ->multiple()
-                            ->options(fn () => Site::pluck('name', 'id')),
+                            ->options(fn() => Site::pluck('name', 'id')),
                     ])
                     ->action(function (Collection $records, array $data) {
                         $records->each(function (Instance $record) use ($data) {
@@ -122,5 +126,13 @@ class InstanceResource extends Resource
             SitesRelationManager::class,
             WebhooksRelationManager::class,
         ];
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()
+            ->withoutGlobalScopes([
+                SoftDeletingScope::class
+            ]);
     }
 }
