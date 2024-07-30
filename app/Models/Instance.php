@@ -6,9 +6,11 @@ use App\Enums\InstanceStatus;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Instance extends Model
 {
+    use SoftDeletes;
     protected $fillable = [
         'instance_token',
         'instance_id',
