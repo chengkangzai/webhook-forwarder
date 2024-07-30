@@ -8,6 +8,7 @@ use App\Filament\Resources\InstanceResource\Pages;
 use App\Filament\Resources\InstanceResource\RelationManagers\SitesRelationManager;
 use App\Models\Instance;
 use App\Models\Site;
+use Filament\Actions\RestoreAction;
 use Filament\Forms\Components\KeyValue;
 use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Select;
@@ -88,6 +89,7 @@ class InstanceResource extends Resource
             ])
             ->actions([
                 DeleteAction::make(),
+                RestoreAction::make(),
             ])
             ->bulkActions([
                 BulkAction::make('bulk_assign_site')
