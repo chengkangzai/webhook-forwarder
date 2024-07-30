@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Prunable;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class Webhook extends Model
 {
@@ -35,7 +36,11 @@ class Webhook extends Model
 
     public function instance(): BelongsTo
     {
-        return $this->belongsTo(Instance::class);
+        return $this->belongsTo(Instance::class)
+            ->withoutGlobalScopes([
+                SoftDeletingScope::class
+            ])
+            ;
     }
 
     public function prunable(): Builder
