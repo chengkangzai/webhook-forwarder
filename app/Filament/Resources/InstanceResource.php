@@ -85,7 +85,7 @@ class InstanceResource extends Resource
                 SelectFilter::make('status')
                     ->default(InstanceStatus::ACTIVE->value)
                     ->options(InstanceStatus::class),
-                TrashedFilter::class,
+                TrashedFilter::make(),
             ])
             ->actions([
                 DeleteAction::make(),
