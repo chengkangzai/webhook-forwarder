@@ -44,7 +44,7 @@ class Webhook extends Model
             ]);
     }
 
-    public function webhookType()
+    public function webhookType():Attribute
     {
         return Attribute::make(
             get: fn() => data_get($this->payload, 'typeWebhook', 'N/A')
