@@ -4,10 +4,12 @@ namespace App\Models;
 
 use App\Enums\WebhookStatus;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Prunable;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use function Pest\Laravel\get;
 
 class Webhook extends Model
 {
@@ -40,6 +42,13 @@ class Webhook extends Model
             ->withoutGlobalScopes([
                 SoftDeletingScope::class,
             ]);
+    }
+
+    public function webhookType()
+    {
+        return Attribute::make(
+            get:data_get($this->status,'typeWebhook','N/A')
+        );
     }
 
     public function prunable(): Builder

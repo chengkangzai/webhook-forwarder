@@ -87,6 +87,12 @@ class WebhookResource extends Resource
                 TextColumn::make('url')
                     ->toggleable()
                     ->toggledHiddenByDefault(),
+
+                TextColumn::make('webhookType')
+                    ->badge()
+                    ->toggleable()
+                    ->toggledHiddenByDefault(),
+
                 TextColumn::make('instance.name')
                     ->visible(fn ($livewire) => $livewire instanceof Pages\ListWebhooks),
                 TextColumn::make('created_at')
