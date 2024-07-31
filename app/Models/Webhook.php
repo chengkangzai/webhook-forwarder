@@ -47,7 +47,7 @@ class Webhook extends Model
     public function webhookType()
     {
         return Attribute::make(
-            get:data_get($this->status,'typeWebhook','N/A')
+            get: fn() => data_get($this->status, 'typeWebhook', 'N/A')
         );
     }
 
