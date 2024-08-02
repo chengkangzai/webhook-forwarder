@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Enums\InstanceStatus;
 use App\Enums\WebhookStatus;
 use App\Filament\Resources\WebhookResource\Pages;
+use App\Models\Customer;
 use App\Models\Site;
 use App\Models\Webhook;
 use Filament\Forms\Components\KeyValue;
@@ -15,11 +16,13 @@ use Filament\Forms\Form;
 use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
 use Filament\Tables\Actions\Action;
+use Filament\Tables\Actions\DeleteBulkAction;
 use Filament\Tables\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Collection;
 use Spatie\WebhookServer\WebhookCall;
 use ValentinMorice\FilamentJsonColumn\FilamentJsonColumn;
 
@@ -117,6 +120,18 @@ class WebhookResource extends Resource
                     ->options(WebhookStatus::class),
             ])
             ->defaultSort('created_at', 'desc')
+            ->bulkActions([
+                DeleteBulkAction::make()
+                    ->action(function (Collection $records) {
+                        Webhook::whereIn('id', $records->pluck('id'))->delete();
+
+                        return Notification::make('success')
+                            ->success()
+                            ->title('Webhook deleted')
+                            ->body('Webhooks have been deleted successfully.')
+                            ->send();
+                    }),
+            ])
             ->actions([
                 ViewAction::make(),
                 Action::make('forward')
