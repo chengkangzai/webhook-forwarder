@@ -19,6 +19,7 @@ use Filament\Tables\Actions\Action;
 use Filament\Tables\Actions\DeleteBulkAction;
 use Filament\Tables\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\Filter;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
@@ -118,6 +119,18 @@ class WebhookResource extends Resource
                 SelectFilter::make('status')
                     ->columnSpanFull()
                     ->options(WebhookStatus::class),
+
+                Filter::make('created_at')
+                    ->form([
+                        TextInput::make('older_than_days'),
+                    ])
+                    ->query(function (Builder $query, array $data): Builder {
+                        return $query
+                            ->when(
+                                $data['older_than_days'],
+                                fn (Builder $query, $date): Builder => $query->whereDate('created_at', '>=', now()->subDays($data['older_than_days'])),
+                            );
+                    })
             ])
             ->defaultSort('created_at', 'desc')
             ->bulkActions([
