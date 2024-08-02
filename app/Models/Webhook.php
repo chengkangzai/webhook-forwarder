@@ -55,6 +55,6 @@ class Webhook extends Model
     {
         return static::query()
             //Prune data that is 60 days old
-            ->where('created_at', '<=', now()->subDays(60));
+            ->where('created_at', '<=', now()->subDays(14));
     }
 }
