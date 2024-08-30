@@ -5,7 +5,6 @@ namespace App\Filament\Resources;
 use App\Enums\InstanceStatus;
 use App\Enums\WebhookStatus;
 use App\Filament\Resources\WebhookResource\Pages;
-use App\Models\Customer;
 use App\Models\Site;
 use App\Models\Webhook;
 use Filament\Forms\Components\KeyValue;
@@ -130,7 +129,7 @@ class WebhookResource extends Resource
                                 $data['older_than_days'],
                                 fn (Builder $query, $date): Builder => $query->whereDate('created_at', '>=', now()->subDays($data['older_than_days'])),
                             );
-                    })
+                    }),
             ])
             ->defaultSort('created_at', 'desc')
             ->bulkActions([

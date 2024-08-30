@@ -4,6 +4,7 @@ namespace App\Integrations\GreenApi;
 
 use App\Integrations\GreenApi\Resource\Account;
 use App\Integrations\GreenApi\Resource\Partner;
+use App\Integrations\GreenApi\Resource\Sending;
 use Saloon\Http\Connector;
 use Saloon\Traits\Plugins\HasTimeout;
 
@@ -44,6 +45,11 @@ class GreenApi extends Connector
     public function account(): Account
     {
         return new Account($this, $this->instanceId, $this->instanceToken);
+    }
+
+    public function sending(): Sending
+    {
+        return new Sending($this, $this->instanceId, $this->instanceToken);
     }
 
     public function partner(): Partner

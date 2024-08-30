@@ -9,7 +9,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Prunable;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
-use function Pest\Laravel\get;
 
 class Webhook extends Model
 {
@@ -44,10 +43,10 @@ class Webhook extends Model
             ]);
     }
 
-    public function webhookType():Attribute
+    public function webhookType(): Attribute
     {
         return Attribute::make(
-            get: fn() => data_get($this->payload, 'typeWebhook', 'N/A')
+            get: fn () => data_get($this->payload, 'typeWebhook', 'N/A')
         );
     }
 

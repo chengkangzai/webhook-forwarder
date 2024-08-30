@@ -36,6 +36,8 @@ return [
     ],
 
     'green-api' => [
+        'instance_id' => env('GREEN_API_INSTANCE_ID'),
+        'instance_token' => env('GREEN_API_INSTANCE_TOKEN'),
         'partner_token' => env('GREEN_API_PARTNER_SECRET'),
         'secret' => env('GREEN_API_SECRET'),
     ],
