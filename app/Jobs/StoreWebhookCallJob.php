@@ -28,24 +28,12 @@ class StoreWebhookCallJob implements ShouldQueue
     {
         $instance = Instance::where('instance_id', data_get($this->payload, 'instanceData.idInstance'))->first();
 
-        if ($instance === null) {
-            Webhook::create([
-                'name' => 'default',
-                'url' => $this->url,
-                'headers' => $this->headers,
-                'payload' => $this->payload,
-                'status' => WebhookStatus::PENDING,
-            ]);
-
-            return;
-        }
-
         $webhook = Webhook::create([
             'name' => 'default',
             'url' => $this->url,
             'headers' => $this->headers,
             'payload' => $this->payload,
-            'instance_id' => $instance->id,
+            'instance_id' => $instance?->id,
             'status' => WebhookStatus::PENDING,
         ]);
 
