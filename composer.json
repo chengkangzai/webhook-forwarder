@@ -6,20 +6,20 @@
     "license": "MIT",
     "require": {
         "php": "^8.2",
-        "filament/filament": "^3.2.96",
-        "laravel/framework": "^11.18.1",
-        "laravel/tinker": "^2.9",
-        "saloonphp/saloon": "^3.9.1",
+        "filament/filament": "^3.2.124",
+        "laravel/framework": "^11.32.0",
+        "laravel/tinker": "^2.10",
+        "saloonphp/saloon": "^3.10.0",
         "spatie/laravel-webhook-server": "^3.8.1",
-        "valentin-morice/filament-json-column": "^1.3.2"
+        "valentin-morice/filament-json-column": "^1.5.0"
     },
     "require-dev": {
-        "fakerphp/faker": "^1.23.1",
-        "laravel/pint": "^1.17",
-        "laravel/sail": "^1.31",
+        "fakerphp/faker": "^1.24.0",
+        "laravel/pint": "^1.18.1",
+        "laravel/sail": "^1.38",
         "mockery/mockery": "^1.6.12",
-        "nunomaduro/collision": "^8.3",
-        "pestphp/pest": "^2.34.9",
+        "nunomaduro/collision": "^8.5",
+        "pestphp/pest": "^2.36.0",
         "pestphp/pest-plugin-laravel": "^2.4"
     },
     "autoload": {
