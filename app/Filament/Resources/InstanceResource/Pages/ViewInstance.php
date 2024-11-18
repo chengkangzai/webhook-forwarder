@@ -19,6 +19,7 @@ class ViewInstance extends ViewRecord
         return [
             DeleteAction::make(),
             Action::make('link_to_forwarder')
+                ->icon('heroicon-o-link')
                 ->action(function (Instance $instance) {
                     $greenApi = new GreenApi($instance->instance_id, $instance->instance_token);
 
