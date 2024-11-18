@@ -9,3 +9,5 @@ Artisan::command('inspire', function () {
 })->purpose('Display an inspiring quote')->hourly();
 
 Schedule::command('model:prune')->weekly();
+
+Schedule::command('horizon:snapshot')->everyFiveMinutes();

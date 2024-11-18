@@ -8,6 +8,7 @@
         "php": "^8.2",
         "filament/filament": "^3.2.124",
         "laravel/framework": "^11.32.0",
+        "laravel/horizon": "^5.29",
         "laravel/tinker": "^2.10",
         "saloonphp/saloon": "^3.10.0",
         "spatie/laravel-webhook-server": "^3.8.1",
